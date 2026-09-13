@@ -35,27 +35,7 @@ to produce viral RNA and proteins. These components are assembled into new
 virus particles, which eventually mature and become capable of infecting
 additional cells.
 
-A simplified view of the HIV replication cycle is:
-
-```text
-HIV RNA
-   ↓
-Reverse transcriptase
-   ↓
-HIV DNA
-   ↓
-Integrase
-   ↓
-Integration into host DNA
-   ↓
-Viral RNA + viral proteins
-   ↓
-Assembly of new virus particles
-   ↓
-Protease-mediated maturation
-   ↓
-Mature HIV
-```
+![HIV replication cycle](figures/Stages-of-the-HIV-Life_Cycle.png)
 
 Because these processes depend on several viral enzymes, those enzymes are
 important targets for **antiretroviral therapy (ART)**.
