@@ -58,7 +58,7 @@ These proteins are therefore part of the core molecular machinery that allows
 HIV to reproduce.
 
 
-![HIV-1 Genome](figures/HIV-1 Virus.png)
+![HIV-1 Genome](figures/HIV-1.png)
 
 
 HIV has a relatively small genome, so it uses compact strategies to encode
