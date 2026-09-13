@@ -59,17 +59,8 @@ HIV to reproduce.
 
 A simplified representation is:
 
-```text
-                 HIV pol gene
-                      │
-        ┌─────────────┼─────────────┐
-        ↓             ↓             ↓
-    Protease     Reverse         Integrase
-                    transcriptase
-        │             │             │
-        ↓             ↓             ↓
-    Maturation     RNA → DNA     DNA integration
-```
+![HIV-1 Genome](figures/HIV-1 Virus.png)
+
 
 HIV has a relatively small genome, so it uses compact strategies to encode
 multiple functional proteins. For example, viral proteins can initially be
