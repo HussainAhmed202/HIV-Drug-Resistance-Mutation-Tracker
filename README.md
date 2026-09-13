@@ -35,7 +35,7 @@ to produce viral RNA and proteins. These components are assembled into new
 virus particles, which eventually mature and become capable of infecting
 additional cells.
 
-![HIV replication cycle](figures/Stages-of-the-HIV-Life_Cycle.png)
+![HIV replication cycle](figures/Stages-of-the-HIV-Life-Cycle.png)
 
 Because these processes depend on several viral enzymes, those enzymes are
 important targets for **antiretroviral therapy (ART)**.
