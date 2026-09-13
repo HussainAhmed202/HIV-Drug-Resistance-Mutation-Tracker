@@ -57,7 +57,6 @@ The `pol` gene encodes several enzymes that are essential for HIV replication:
 These proteins are therefore part of the core molecular machinery that allows
 HIV to reproduce.
 
-A simplified representation is:
 
 ![HIV-1 Genome](figures/HIV-1 Virus.png)
 
