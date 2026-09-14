@@ -13,7 +13,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 BiocManager::install(c(
   "Biostrings",
-  "DECIPHER"
+  "DECIPHER",
 ))
 
 # Verify everything loaded correctly
