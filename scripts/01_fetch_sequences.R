@@ -79,6 +79,32 @@ for (i in seq_along(search_result$ids)) {
 
 extract_pol_indices <- function(sequences_gb_list) {
 
+  # Search Space 
+
+  #   "LOCUS       MT222943                9002 bp    RNA     linear   VRL 13-MAY-2020\nDEFINITION  
+  #   HIV-1 isolate DEURF15PK040 from Pakistan, complete genome.\nACCESSION   MT222943\nVERSION     
+  #   MT222943.1\nKEYWORDS    .\nSOURCE      Human immunodeficiency virus 1 (HIV-1)\n  ORGANISM  
+  #   Human immunodeficiency virus 1\n            Viruses; Riboviria; Pararnavirae; Artverviricota; 
+  #   Revtraviricetes;\n            Ortervirales; Retroviridae; Orthoretrovirinae; Lentivirus;\n 
+  #   Lentivirus humimdef1.\nREFERENCE   1  (bases 1 to 9002)\n  AUTHORS   Hora,B., Chen,Y., 
+  #   Shah,S.A., Busch,M.P., Denny,T.N. and Gao,F.\n  TITLE     Characterization of near full-length 
+  #   genome sequences for standard\n            panels of HIV-1 isolates established at the 
+  #   External Quality\n            Assurance Program Oversight Laboratory (EQAPOL)\n  JOURNAL   
+  #   Unpublished\nREFERENCE   2  (bases 1 to 9002)\n  AUTHORS   Hora,B., Chen,Y., Shah,S., 
+  #   Busch,M., Denny,T. and Gao,F.\n  TITLE     Direct Submission\n  JOURNAL   Submitted ....
+  #   .....gene="pol"\n     CDS             <.....    
+  #   ....
+  #   ....
+  
+  # Goal :: Look for the pol gene CDS start and end indexes defined in the Genbank file
+  
+  # Look at the highlighted portion below
+                        # gene=\"pol\"\n     CDS             <1597..4608\n
+  # start_idx of pol gene CDS = 1597
+  # end_idx of pol gene CDS = 4608
+  
+
+      
   needle <- 'gene="pol"\n     CDS             <'
   needle_len <- nchar(needle)  # 33
   
@@ -92,26 +118,26 @@ extract_pol_indices <- function(sequences_gb_list) {
     
     search_space_end_idx <- nchar(sequences_gb_list[[i]])
     
-    idx <- regexpr(needle, sequences_gb_list[[i]])  #3616
+    search_space_idx <- regexpr(needle, sequences_gb_list[[i]])  #3616
     
     if (idx[1] == -1) {
       warning(paste("pol CDS not found for record:", i))
       next
     }
-    search_space_start_idx <- idx + needle_len
+    search_space_start_idx <- search_space_idx + needle_len
 
     remaining_seq <- substr(sequences_gb_list[[i]], search_space_start_idx, search_space_end_idx)  
 
     # find the first newline character in the new search space - this is where the end of my search space
 
-    idx <- regexpr("\n",remaining_seq)
+    search_space_idx <- regexpr("\n",remaining_seq)
 
-    if (idx[1] == -1) {
+    if (search_space_idx[1] == -1) {
       warning(paste("End index not found for record:", i))
       next
     }
 
-    search_space_end_idx <- search_space_start_idx + idx - 2 # 9
+    search_space_end_idx <- search_space_start_idx + search_space_idx - 2 # 9
     
     results[["Pol_Start_Idx"]][i] <- strsplit(
       substr(sequences_gb_list[[i]], search_space_start_idx, search_space_end_idx),  #1597..4608
@@ -129,14 +155,45 @@ extract_pol_indices <- function(sequences_gb_list) {
 
 df <- c(df, extract_pol_indices(sequences_gb_list))
 
-
-# 1    MT222943.1 HIV-1 isolate DEURF15PK040 from Pakistan, complete genome          3649        3658
-# 2    MT222942.1 HIV-1 isolate DEMA115PK021 from Pakistan, complete genome          3649        3658
-# 3    KX232629.1        HIV-1 isolate PK040 from Pakistan, complete genome          3533        3542
+pol_gene <- substr(df$Fasta_Seq,df$Pol_Start_Idx,df$Pol_End_Idx)
+pol_gene[["fasta_title"]] <- gsub("complete genome","pol gene complete sequence taken", df$Title)
 
 
 # Save raw FASTA to file
 dir.create("data/raw", showWarnings = FALSE, recursive = TRUE)
-writeLines(sequences_fasta, "data/raw/hiv_pol_sequences.fasta")
+file <- file("data/raw/hiv_pol_sequences_new.fasta", open = "w")
 
-cat("Saved", length(search_result$ids), "sequences to data/raw/hiv_pol_sequences.fasta\n")
+for (i in seq_len(length(df$Fasta_Seq))) {
+  
+  # Extract sequence
+  sequence <- substr(
+    df$Fasta_Seq[i],
+    df$Pol_Start_Idx[i],
+    df$Pol_End_Idx[i]
+  )
+  
+  # Create FASTA header
+  header <- gsub(
+    "complete genome",
+    "pol gene complete sequence taken",
+    df$Title[i]
+  )
+  
+  # Write header
+  writeLines(
+    paste0(">", header),
+    file
+  )
+  
+  # Write sequence
+  writeLines(
+    sequence,
+    file
+  )
+}
+
+close(file)
+
+# writeLines(sequences_fasta, "data/raw/hiv_pol_sequences.fasta")
+# cat("Saved", length(search_result$ids), "sequences to data/raw/hiv_pol_sequences.fasta\n")
+cat("Saved", length(search_result$ids), "sequences to data/raw/hiv_pol_sequences_new.fasta\n")
