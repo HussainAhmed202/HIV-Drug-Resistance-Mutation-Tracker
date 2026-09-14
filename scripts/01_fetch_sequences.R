@@ -5,7 +5,7 @@ library(rentrez)
 
 search_result <- entrez_search(
   db = "nuccore",
-  term = "HIV-1[Organism] AND pol[Gene] AND Pakistan[Title]", 
+  term = "HIV-1[Organism] AND pol[Gene] AND protease AND reverse transcriptase AND Pakistan[Title]", 
   retmax = 40
 )
 
